@@ -33,22 +33,41 @@ openclaw.ru/
 └── scripts/           # Вспомогательные скрипты
 ```
 
-## 🛠️ Установка и запуск
+## 🚀 Быстрый старт
 
+### 1. Клонирование и настройка
 ```bash
-# Клонирование репозитория
+# Перейти в рабочую область OpenClaw
+cd /Users/rustammitaev/.openclaw/workspace
+
+# Клонировать проект
 git clone https://github.com/rustamkvk/openclaw.ru.git
 cd openclaw.ru
 
-# Установка зависимостей
-npm install
-
-# Запуск в режиме разработки
-npm run dev
-
-# Сборка для production
-npm run build
+# Настроить GitHub репозиторий (если еще не настроен)
+./scripts/setup-repo.sh
 ```
+
+### 2. Установка зависимостей
+```bash
+npm install
+```
+
+### 3. Запуск в режиме разработки
+```bash
+# Запустить фронтенд и бэкенд одновременно
+npm run dev:full
+
+# Или по отдельности:
+# npm run dev      # Фронтенд на http://localhost:3000
+# npm run server   # Бэкенд на http://localhost:3001
+```
+
+### 4. Открыть в браузере
+- **Дашборд:** http://localhost:3000
+- **API:** http://localhost:3001/api/health
+
+📖 Подробная инструкция: [QUICK_START.md](QUICK_START.md)
 
 ## 🔌 Интеграция с OpenClaw
 
