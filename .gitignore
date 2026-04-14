@@ -46,6 +46,9 @@ Thumbs.db
 tmp/
 temp/
 
+# OSPanel (local)
+.osp/
+
 # OpenClaw specific
 .openclaw/
 memory_index.json

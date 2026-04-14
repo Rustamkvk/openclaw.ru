@@ -1,0 +1,496 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Личный кабинет — Атлас (Development)</title>
+  <style>
+    :root {
+      --bg: #09101d;
+      --panel: rgba(15, 23, 42, 0.82);
+      --panel2: rgba(30, 41, 59, 0.8);
+      --border: rgba(148, 163, 184, 0.16);
+      --text: #e7eefc;
+      --muted: #9db0d5;
+      --accent: #60a5fa;
+      --accent2: #8b5cf6;
+      --success: #34d399;
+      --warn: #fbbf24;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      color: var(--text);
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background:
+        radial-gradient(circle at top left, rgba(96,165,250,.20), transparent 26%),
+        radial-gradient(circle at bottom right, rgba(139,92,246,.18), transparent 24%),
+        linear-gradient(180deg, #09101d, #0a1220);
+      min-height: 100vh;
+    }
+    .app {
+      display: grid;
+      grid-template-columns: 280px 1fr;
+      min-height: 100vh;
+    }
+    .sidebar {
+      border-right: 1px solid var(--border);
+      background: rgba(7, 12, 24, 0.86);
+      backdrop-filter: blur(14px);
+      padding: 24px 16px;
+    }
+    .brand {
+      padding: 10px 12px 24px;
+    }
+    .brand h1 {
+      margin: 0;
+      font-size: 24px;
+      letter-spacing: -0.03em;
+    }
+    .brand p {
+      margin: 8px 0 0;
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.5;
+    }
+    .nav {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      margin-top: 10px;
+    }
+    .nav button {
+      width: 100%;
+      text-align: left;
+      border: 1px solid transparent;
+      background: transparent;
+      color: var(--text);
+      padding: 14px 14px;
+      border-radius: 14px;
+      cursor: pointer;
+      font-size: 15px;
+    }
+    .nav button.active, .nav button:hover {
+      background: linear-gradient(135deg, rgba(96,165,250,.14), rgba(139,92,246,.12));
+      border-color: var(--border);
+    }
+    .main {
+      padding: 26px;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+    .panel {
+      background: var(--panel);
+      border: 1px solid var(--border);
+      border-radius: 22px;
+      backdrop-filter: blur(16px);
+      box-shadow: 0 18px 50px rgba(0,0,0,.24);
+    }
+    .hero {
+      padding: 26px;
+    }
+    .hero h2 {
+      margin: 0;
+      font-size: clamp(28px, 4vw, 46px);
+      letter-spacing: -0.03em;
+    }
+    .hero p {
+      color: var(--muted);
+      line-height: 1.6;
+      max-width: 850px;
+    }
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+      margin-top: 18px;
+    }
+    .card {
+      background: var(--panel2);
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      padding: 18px;
+    }
+    .card .label {
+      color: var(--muted);
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: .08em;
+    }
+    .card .value {
+      margin-top: 8px;
+      font-size: 24px;
+      font-weight: 700;
+    }
+    .section {
+      display: none;
+    }
+    .section.active {
+      display: block;
+    }
+    iframe {
+      width: 100%;
+      height: 72vh;
+      border: 0;
+      border-radius: 20px;
+      background: rgba(15,23,42,.4);
+    }
+    .toolbar {
+      display: flex;
+      gap: 10px;
+      align-items: center;
+      flex-wrap: wrap;
+      margin-bottom: 14px;
+    }
+    .pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 12px;
+      border-radius: 999px;
+      border: 1px solid var(--border);
+      color: var(--muted);
+      background: rgba(255,255,255,.03);
+      font-size: 13px;
+    }
+    .btn {
+      border: 1px solid var(--border);
+      background: linear-gradient(135deg, rgba(96,165,250,.16), rgba(139,92,246,.14));
+      color: var(--text);
+      padding: 11px 14px;
+      border-radius: 14px;
+      cursor: pointer;
+      font-weight: 600;
+    }
+    .hint {
+      color: var(--muted);
+      font-size: 13px;
+      margin-top: 8px;
+    }
+    
+    /* Чат-интерфейс */
+    .chat-container {
+      display: flex;
+      flex-direction: column;
+      height: 600px;
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      overflow: hidden;
+      background: var(--panel);
+    }
+    
+    .chat-header {
+      padding: 20px;
+      border-bottom: 1px solid var(--border);
+      background: rgba(15, 23, 42, 0.9);
+    }
+    
+    .chat-header h3 {
+      margin: 0;
+      font-size: 18px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    
+    .chat-status {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-top: 8px;
+      font-size: 13px;
+    }
+    
+    .status-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--success);
+    }
+    
+    .status-dot.connecting {
+      background: var(--warn);
+      animation: pulse 1.5s infinite;
+    }
+    
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.5; }
+    }
+    
+    .chat-messages {
+      flex: 1;
+      overflow-y: auto;
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+    
+    .message {
+      max-width: 80%;
+      padding: 12px 16px;
+      border-radius: 18px;
+      line-height: 1.5;
+    }
+    
+    .message.user {
+      align-self: flex-end;
+      background: linear-gradient(135deg, rgba(96,165,250,.2), rgba(139,92,246,.15));
+      border: 1px solid rgba(96,165,250,.3);
+    }
+    
+    .message.assistant {
+      align-self: flex-start;
+      background: rgba(30, 41, 59, 0.6);
+      border: 1px solid var(--border);
+    }
+    
+    .message-time {
+      font-size: 11px;
+      color: var(--muted);
+      margin-top: 4px;
+      text-align: right;
+    }
+    
+    .chat-input {
+      padding: 20px;
+      border-top: 1px solid var(--border);
+      background: rgba(15, 23, 42, 0.9);
+      display: flex;
+      gap: 12px;
+    }
+    
+    .chat-input textarea {
+      flex: 1;
+      background: rgba(255,255,255,.05);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 14px;
+      color: var(--text);
+      font-family: inherit;
+      font-size: 15px;
+      resize: none;
+      min-height: 60px;
+      max-height: 120px;
+    }
+    
+    .chat-input textarea:focus {
+      outline: none;
+      border-color: var(--accent);
+    }
+    
+    .chat-input button {
+      background: linear-gradient(135deg, var(--accent), var(--accent2));
+      color: white;
+      border: none;
+      border-radius: 14px;
+      padding: 0 24px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: transform 0.2s;
+    }
+    
+    .chat-input button:hover {
+      transform: translateY(-2px);
+    }
+    
+    .chat-input button:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+      transform: none;
+    }
+    
+    /* Быстрые команды */
+    .quick-commands {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 12px;
+      margin-top: 20px;
+    }
+    
+    .quick-command {
+      background: rgba(30, 41, 59, 0.6);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 16px;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    
+    .quick-command:hover {
+      background: rgba(96,165,250,.1);
+      border-color: rgba(96,165,250,.3);
+      transform: translateY(-2px);
+    }
+    
+    .quick-command .icon {
+      font-size: 20px;
+      margin-bottom: 8px;
+    }
+    
+    .quick-command .title {
+      font-weight: 600;
+      margin-bottom: 4px;
+    }
+    
+    .quick-command .desc {
+      font-size: 13px;
+      color: var(--muted);
+    }
+    
+    @media (max-width: 980px) {
+      .app { grid-template-columns: 1fr; }
+      .sidebar { border-right: 0; border-bottom: 1px solid var(--border); }
+      .grid { grid-template-columns: 1fr; }
+      iframe { height: 68vh; }
+      .chat-container { height: 500px; }
+      .quick-commands { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <div class="app">
+    <aside class="sidebar">
+      <div class="brand">
+        <h1>⚡ Личный кабинет</h1>
+        <p>Development версия с чат-интерфейсом</p>
+      </div>
+      <nav class="nav">
+        <button class="tab active" data-tab="home">🏠 Главная</button>
+        <button class="tab" data-tab="chat">💬 Чат с Атласом</button>
+        <button class="tab" data-tab="memory">🧠 Память</button>
+        <button class="tab" data-tab="tasks">📌 Задачи</button>
+        <button class="tab" data-tab="commands">🚀 Быстрые команды</button>
+      </nav>
+    </aside>
+
+    <main class="main">
+      <section class="section active" id="home">
+        <div class="panel hero">
+          <h2>Development версия дашборда</h2>
+          <p>
+            Это тестовая версия с чат-интерфейсом и WebSocket соединением. Все изменения тестируются здесь перед переносом в production.
+          </p>
+          <div class="grid">
+            <div class="card"><div class="label">Версия</div><div class="value">Development</div></div>
+            <div class="card"><div class="label">WebSocket</div><div class="value" id="ws-status">Отключён</div></div>
+            <div class="card"><div class="label">Чат</div><div class="value">Активен</div></div>
+          </div>
+        </div>
+      </section>
+
+      <section class="section" id="chat">
+        <div class="panel chat-container">
+          <div class="chat-header">
+            <h3>💬 Чат с Атласом</h3>
+            <div class="chat-status">
+              <div class="status-dot" id="status-dot"></div>
+              <span id="status-text">Подключение к WebSocket...</span>
+            </div>
+          </div>
+          
+          <div class="chat-messages" id="chat-messages">
+            <div class="message assistant">
+              Привет, Мастер! Я Атлас. Это development версия нашего дашборда с чат-интерфейсом.
+              <div class="message-time" id="welcome-time"></div>
+            </div>
+          </div>
+          
+          <div class="chat-input">
+            <textarea 
+              id="message-input" 
+              placeholder="Введите сообщение для Атласа..." 
+              rows="3"
+            ></textarea>
+            <button id="send-button" disabled>Отправить</button>
+          </div>
+        </div>
+      </section>
+
+      <section class="section" id="memory">
+        <div class="toolbar">
+          <div class="pill">🧠 Экран памяти</div>
+          <div class="pill">🔄 Автообновление</div>
+          <button class="btn" onclick="reloadFrame('memoryFrame')">Обновить</button>
+        </div>
+        <div class="panel" style="padding:14px;">
+          <iframe id="memoryFrame" src="/memory_center.html"></iframe>
+        </div>
+      </section>
+
+      <section class="section" id="tasks">
+        <div class="toolbar">
+          <div class="pill">📌 Управление задачами</div>
+        </div>
+        <div class="panel" style="padding:18px;">
+          <iframe id="taskFrame" src="/TASK_BOARD.md"></iframe>
+        </div>
+      </section>
+
+      <section class="section" id="commands">
+        <div class="panel" style="padding:26px;">
+          <h3 style="margin-top: 0;">🚀 Быстрые команды</h3>
+          <p style="color: var(--muted); margin-bottom: 20px;">
+            Нажмите на команду для быстрого выполнения
+          </p>
+          
+          <div class="quick-commands">
+            <div class="quick-command" onclick="sendQuickCommand('status')">
+              <div class="icon">📊</div>
+              <div class="title">Статус системы</div>
+              <div class="desc">Показать текущее состояние</div>
+            </div>
+            
+            <div class="quick-command" onclick="sendQuickCommand('update_memory')">
+              <div class="icon">🔄</div>
+              <div class="title">Обновить память</div>
+              <div class="desc">Обновить индекс памяти</div>
+            </div>
+            
+            <div class="quick-command" onclick="sendQuickCommand('git_status')">
+              <div class="icon">📁</div>
+              <div class="title">Git статус</div>
+              <div class="desc">Проверить состояние репозитория</div>
+            </div>
+            
+            <div class="quick-command" onclick="sendQuickCommand('backup')">
+              <div class="icon">💾</div>
+              <div class="title">Создать бэкап</div>
+              <div class="desc">Резервная копия development</div>
+            </div>
+            
+            <div class="quick-command" onclick="sendQuickCommand('test_websocket')">
+              <div class="icon">🔌</div>
+              <div class="title">Тест WebSocket</div>
+              <div class="desc">Проверить соединение</div>
+            </div>
+            
+            <div class="quick-command" onclick="sendQuickCommand('deploy_preview')">
+              <div class="icon">🚀</div>
+              <div class="title">Превью деплоя</div>
+              <div class="desc">Показать план развертывания</div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <script>
+    // Установка времени приветственного сообщения
+    document.getElementById('welcome-time').textContent = new Date().toLocaleTimeString('ru-RU', {
+      hour: '2-digit',
+      minute: '2-digit'
+    });
+
+    // Управление вкладками
+    const tabs = document.querySelectorAll('.tab');
+    const sections = document.querySelectorAll('.section');
+    tabs.forEach(btn => {
+      btn.addEventListener('click', () => {
+        tabs.forEach(b => b.classList.remove('active'));
+        sections.forEach(s => s.classList.remove('active'));
+        btn.classList.add('active');
+        document.getElementById(btn.dataset

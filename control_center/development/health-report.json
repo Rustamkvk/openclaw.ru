@@ -1,0 +1,70 @@
+{
+  "timestamp": "2026-03-24T20:12:04.222Z",
+  "checks": {
+    "fileStructure": {
+      "status": "healthy",
+      "existing": [
+        "index.html",
+        "script.js",
+        "websocket-server.js",
+        "backup-script.js",
+        "package.json",
+        "README.md"
+      ],
+      "missing": [],
+      "total": 6,
+      "found": 6
+    },
+    "webSocketServer": {
+      "status": "healthy",
+      "port": 8081,
+      "statusCode": 200,
+      "message": "Сервер отвечает"
+    },
+    "gitStatus": {
+      "status": "dirty",
+      "branch": "main",
+      "changes": 3,
+      "message": "3 несохраненных изменений"
+    },
+    "memoryIndex": {
+      "status": "fresh",
+      "exists": true,
+      "documents": 11,
+      "lastModified": "2026-03-24T20:11:44.365Z",
+      "ageMinutes": 0,
+      "message": "Индекс актуален"
+    },
+    "backupSystem": {
+      "status": "healthy",
+      "backupCount": 11,
+      "latestBackup": "22-57-05",
+      "backupsPath": "/Users/rustammitaev/.openclaw/workspace/control_center/backups/2026-03-24",
+      "message": "11 бэкапов сегодня"
+    },
+    "dependencies": {
+      "status": "installed",
+      "hasNodeModules": true,
+      "hasPackageJson": true,
+      "dependencies": 1,
+      "devDependencies": 1,
+      "message": "Зависимости установлены"
+    },
+    "browserCompatibility": {
+      "status": "compatible",
+      "features": {
+        "websocket": true,
+        "localstorage": true,
+        "fetch": true,
+        "promises": true,
+        "es6": true
+      },
+      "missingFeatures": [],
+      "message": "Совместим с современными браузерами"
+    }
+  },
+  "overall": "healthy",
+  "healthPercentage": 86,
+  "healthyChecks": 6,
+  "totalChecks": 7
+}

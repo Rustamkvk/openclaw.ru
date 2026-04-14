@@ -1,0 +1,13 @@
+{
+  "users": [
+    {
+      "id": "1",
+      "username": "admin",
+      "password": "3eb3fe66b31e3b4d10fa70b5cad49c7112294af6ae4e476a1c405155d45aa121",
+      "email": "admin@localhost",
+      "role": "admin",
+      "createdAt": "2026-03-30T15:47:39.942Z",
+      "updatedAt": "2026-03-30T15:47:39.943Z"
+    }
+  ]
+}

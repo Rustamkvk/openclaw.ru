@@ -1,0 +1,1478 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Контрольный центр Атласа</title>
+  <style>
+    :root {
+      /* Современная темная палитра с акцентами */
+      --bg-primary: #0a0e17;
+      --bg-secondary: #111827;
+      --bg-card: #1f2937;
+      --bg-hover: #374151;
+      --bg-accent: rgba(59, 130, 246, 0.1);
+      
+      --text-primary: #f9fafb;
+      --text-secondary: #d1d5db;
+      --text-muted: #9ca3af;
+      
+      --border: #374151;
+      --border-light: #4b5563;
+      
+      --accent-blue: #3b82f6;
+      --accent-purple: #8b5cf6;
+      --accent-green: #10b981;
+      --accent-amber: #f59e0b;
+      --accent-red: #ef4444;
+      --accent-cyan: #06b6d4;
+      
+      --shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.3), 0 4px 6px -2px rgba(0, 0, 0, 0.2);
+      --shadow-lg: 0 20px 25px -5px rgba(0, 0, 0, 0.3), 0 10px 10px -5px rgba(0, 0, 0, 0.2);
+      --shadow-inner: inset 0 2px 4px 0 rgba(0, 0, 0, 0.3);
+      
+      --radius: 12px;
+      --radius-sm: 8px;
+      --radius-lg: 16px;
+      
+      --transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+    
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+      background: linear-gradient(135deg, var(--bg-primary) 0%, var(--bg-secondary) 100%);
+      color: var(--text-primary);
+      min-height: 100vh;
+      line-height: 1.6;
+      overflow-x: hidden;
+    }
+    
+    /* Стили скроллбара */
+    ::-webkit-scrollbar {
+      width: 10px;
+      height: 10px;
+    }
+    
+    ::-webkit-scrollbar-track {
+      background: var(--bg-secondary);
+      border-radius: var(--radius);
+    }
+    
+    ::-webkit-scrollbar-thumb {
+      background: var(--border-light);
+      border-radius: var(--radius);
+    }
+    
+    ::-webkit-scrollbar-thumb:hover {
+      background: var(--border);
+    }
+    
+    /* Контейнер */
+    .container {
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 24px;
+    }
+    
+    /* Хедер */
+    .header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 20px 0;
+      margin-bottom: 32px;
+      border-bottom: 1px solid var(--border);
+    }
+    
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    
+    .logo-icon {
+      width: 40px;
+      height: 40px;
+      background: linear-gradient(135deg, var(--accent-blue), var(--accent-purple));
+      border-radius: var(--radius);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: bold;
+      font-size: 20px;
+      color: white;
+    }
+    
+    .logo-text h1 {
+      font-size: 24px;
+      font-weight: 700;
+      background: linear-gradient(135deg, var(--accent-blue), var(--accent-purple));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    
+    .logo-text p {
+      font-size: 14px;
+      color: var(--text-muted);
+    }
+    
+    .status-badge {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 16px;
+      background: var(--bg-accent);
+      border: 1px solid var(--accent-blue);
+      border-radius: 20px;
+      font-size: 14px;
+    }
+    
+    .status-dot {
+      width: 8px;
+      height: 8px;
+      background: var(--accent-green);
+      border-radius: 50%;
+      animation: pulse 2s infinite;
+    }
+    
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.5; }
+    }
+    
+    /* Основная сетка */
+    .main-grid {
+      display: grid;
+      grid-template-columns: 280px 1fr;
+      gap: 24px;
+      min-height: calc(100vh - 180px);
+    }
+    
+    /* Сайдбар */
+    .sidebar {
+      background: var(--bg-card);
+      border-radius: var(--radius-lg);
+      padding: 24px;
+      box-shadow: var(--shadow);
+      height: fit-content;
+      position: sticky;
+      top: 24px;
+    }
+    
+    .nav-section {
+      margin-bottom: 32px;
+    }
+    
+    .nav-section h3 {
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: var(--text-muted);
+      margin-bottom: 16px;
+      font-weight: 600;
+    }
+    
+    .nav-links {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    
+    .nav-link {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 12px 16px;
+      color: var(--text-secondary);
+      text-decoration: none;
+      border-radius: var(--radius-sm);
+      transition: var(--transition);
+      font-weight: 500;
+    }
+    
+    .nav-link:hover {
+      background: var(--bg-hover);
+      color: var(--text-primary);
+      transform: translateX(4px);
+    }
+    
+    .nav-link.active {
+      background: var(--bg-accent);
+      color: var(--accent-blue);
+      border-left: 3px solid var(--accent-blue);
+    }
+    
+    .nav-link i {
+      font-size: 18px;
+      width: 24px;
+      text-align: center;
+    }
+    
+    /* Контент */
+    .content {
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+    }
+    
+    /* Карточки */
+    .card-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 24px;
+      margin-bottom: 24px;
+    }
+    
+    .card {
+      background: var(--bg-card);
+      border-radius: var(--radius-lg);
+      padding: 24px;
+      box-shadow: var(--shadow);
+      transition: var(--transition);
+      border: 1px solid transparent;
+    }
+    
+    .card:hover {
+      transform: translateY(-4px);
+      box-shadow: var(--shadow-lg);
+      border-color: var(--border-light);
+    }
+    
+    .card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+    
+    .card-title {
+      font-size: 18px;
+      font-weight: 600;
+      color: var(--text-primary);
+    }
+    
+    .card-icon {
+      width: 48px;
+      height: 48px;
+      border-radius: var(--radius);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 24px;
+    }
+    
+    .icon-blue { background: rgba(59, 130, 246, 0.1); color: var(--accent-blue); }
+    .icon-purple { background: rgba(139, 92, 246, 0.1); color: var(--accent-purple); }
+    .icon-green { background: rgba(16, 185, 129, 0.1); color: var(--accent-green); }
+    .icon-amber { background: rgba(245, 158, 11, 0.1); color: var(--accent-amber); }
+    .icon-red { background: rgba(239, 68, 68, 0.1); color: var(--accent-red); }
+    .icon-cyan { background: rgba(6, 182, 212, 0.1); color: var(--accent-cyan); }
+    
+    .card-stats {
+      font-size: 32px;
+      font-weight: 700;
+      margin-bottom: 8px;
+      background: linear-gradient(135deg, var(--accent-blue), var(--accent-purple));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    
+    .card-desc {
+      font-size: 14px;
+      color: var(--text-muted);
+      line-height: 1.5;
+    }
+    
+    /* Iframe контейнер */
+    .iframe-container {
+      background: var(--bg-card);
+      border-radius: var(--radius-lg);
+      padding: 0;
+      box-shadow: var(--shadow);
+      overflow: hidden;
+      flex-grow: 1;
+      display: none;
+    }
+    
+    .iframe-container.active {
+      display: block;
+      animation: fadeIn 0.3s ease;
+    }
+    
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    
+    .iframe-header {
+      padding: 20px 24px;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    
+    .iframe-title {
+      font-size: 18px;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    
+    .iframe-close {
+      background: none;
+      border: none;
+      color: var(--text-muted);
+      cursor: pointer;
+      padding: 8px;
+      border-radius: var(--radius-sm);
+      transition: var(--transition);
+    }
+    
+    .iframe-close:hover {
+      background: var(--bg-hover);
+      color: var(--text-primary);
+    }
+    
+    .iframe-content {
+      height: 600px;
+      width: 100%;
+      border: none;
+    }
+    
+    /* Секция 44-ФЗ */
+    .fz-section {
+      background: var(--bg-card);
+      border-radius: var(--radius-lg);
+      padding: 32px;
+      box-shadow: var(--shadow);
+    }
+    
+    .fz-header {
+      text-align: center;
+      margin-bottom: 32px;
+    }
+    
+    .fz-header h2 {
+      font-size: 28px;
+      font-weight: 700;
+      margin-bottom: 12px;
+      background: linear-gradient(135deg, var(--accent-blue), var(--accent-purple));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    
+    .fz-header p {
+      color: var(--text-muted);
+      max-width: 600px;
+      margin: 0 auto;
+    }
+    
+    .fz-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 20px;
+      margin-bottom: 32px;
+    }
+    
+    .fz-card {
+      background: var(--bg-secondary);
+      border-radius: var(--radius);
+      padding: 24px;
+      border: 1px solid var(--border);
+      transition: var(--transition);
+      cursor: pointer;
+    }
+    
+    .fz-card:hover {
+      border-color: var(--accent-blue);
+      transform: translateY(-4px);
+    }
+    
+    .fz-card-icon {
+      width: 56px;
+      height: 56px;
+      border-radius: var(--radius);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 16px;
+      font-size: 28px;
+    }
+    
+    .fz-card-title {
+      font-size: 18px;
+      font-weight: 600;
+      margin-bottom: 8px;
+      color: var(--text-primary);
+    }
+    
+    .fz-card-desc {
+      font-size: 14px;
+      color: var(--text-muted);
+      line-height: 1.5;
+    }
+    
+    /* Футер */
+    .footer {
+      text-align: center;
+      padding: 24px 0;
+      margin-top: 48px;
+      border-top: 1px solid var(--border);
+      color: var(--text-muted);
+      font-size: 14px;
+    }
+    
+    /* Адаптивность */
+    @media (max-width: 1024px) {
+      .main-grid {
+        grid-template-columns: 1fr;
+      }
+      
+      .sidebar {
+        position: static;
+      }
+    }
+    
+    @media (max-width: 768px) {
+      .container {
+        padding: 16px;
+      }
+      
+      .card-grid {
+        grid-template-columns: 1fr;
+      }
+      
+      .header {
+        flex-direction: column;
+        gap: 16px;
+        text-align: center;
+      }
+    }
+
+    /* Стили для авторизации */
+    .header-right {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .auth-buttons {
+      display: flex;
+      gap: 8px;
+    }
+
+    .user-info {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 8px 16px;
+      background: var(--bg-card);
+      border-radius: var(--radius);
+      border: 1px solid var(--border);
+      transition: var(--transition);
+    }
+
+    .user-info:hover {
+      border-color: var(--accent-blue);
+    }
+
+    .user-avatar {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--accent-blue), var(--accent-purple));
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-size: 16px;
+    }
+
+    .user-details {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .user-name {
+      font-weight: 600;
+      font-size: 14px;
+    }
+
+    .user-role {
+      font-size: 12px;
+      color: var(--text-muted);
+    }
+
+    .btn-icon {
+      width: 36px;
+      height: 36px;
+      padding: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    /* Модальные окна */
+    .modal {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.8);
+      backdrop-filter: blur(4px);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 1000;
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+
+    .modal.active {
+      display: flex;
+      opacity: 1;
+    }
+
+    .modal-content {
+      background: var(--bg-card);
+      border-radius: var(--radius-lg);
+      width: 100%;
+      max-width: 400px;
+      box-shadow: var(--shadow-lg);
+      animation: modalSlideIn 0.3s ease;
+    }
+
+    @keyframes modalSlideIn {
+      from {
+        opacity: 0;
+        transform: translateY(-20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .modal-header {
+      padding: 24px;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .modal-header h2 {
+      font-size: 20px;
+      font-weight: 600;
+      margin: 0;
+    }
+
+    .modal-close {
+      background: none;
+      border: none;
+      color: var(--text-muted);
+      font-size: 24px;
+      cursor: pointer;
+      padding: 4px;
+      border-radius: var(--radius-sm);
+      transition: var(--transition);
+      line-height: 1;
+    }
+
+    .modal-close:hover {
+      background: var(--bg-hover);
+      color: var(--text-primary);
+    }
+
+    .modal-body {
+      padding: 24px;
+    }
+
+    .form-group {
+      margin-bottom: 20px;
+    }
+
+    .form-group label {
+      display: block;
+      margin-bottom: 8px;
+      font-weight: 500;
+      color: var(--text-secondary);
+    }
+
+    .form-group input {
+      width: 100%;
+      padding: 12px 16px;
+      background: var(--bg-secondary);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      color: var(--text-primary);
+      font-size: 14px;
+      transition: var(--transition);
+    }
+
+    .form-group input:focus {
+      outline: none;
+      border-color: var(--accent-blue);
+      box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+    }
+
+    .form-hint {
+      font-size: 12px;
+      color: var(--text-muted);
+      margin-top: 4px;
+    }
+
+    .form-actions {
+      margin-top: 24px;
+    }
+
+    .btn-block {
+      width: 100%;
+    }
+
+    .form-footer {
+      margin-top: 20px;
+      text-align: center;
+      font-size: 14px;
+      color: var(--text-muted);
+    }
+
+    .form-footer a {
+      color: var(--accent-blue);
+      text-decoration: none;
+      transition: var(--transition);
+    }
+
+    .form-footer a:hover {
+      text-decoration: underline;
+    }
+
+    /* Кнопки */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 20px;
+      border-radius: var(--radius-sm);
+      font-weight: 500;
+      font-size: 14px;
+      cursor: pointer;
+      transition: var(--transition);
+      border: 1px solid transparent;
+      text-decoration: none;
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, var(--accent-blue), var(--accent-purple));
+      color: white;
+      border: none;
+    }
+
+    .btn-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+    }
+
+    .btn-outline {
+      background: transparent;
+      border: 1px solid var(--border);
+      color: var(--text-secondary);
+    }
+
+    .btn-outline:hover {
+      border-color: var(--accent-blue);
+      color: var(--accent-blue);
+    }
+
+    /* Сообщения об ошибках/успехе */
+    .alert {
+      padding: 12px 16px;
+      border-radius: var(--radius-sm);
+      margin-bottom: 16px;
+      font-size: 14px;
+      display: none;
+    }
+
+    .alert-success {
+      background: rgba(16, 185, 129, 0.1);
+      border: 1px solid var(--accent-green);
+      color: var(--accent-green);
+    }
+
+    .alert-error {
+      background: rgba(239, 68, 68, 0.1);
+      border: 1px solid var(--accent-red);
+      color: var(--accent-red);
+    }
+
+    .alert-warning {
+      background: rgba(245, 158, 11, 0.1);
+      border: 1px solid var(--accent-amber);
+      color: var(--accent-amber);
+    }
+  </style>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+  <div class="container">
+    <!-- Хедер -->
+    <header class="header">
+      <div class="logo">
+        <div class="logo-icon">⚡</div>
+        <div class="logo-text">
+          <h1>Контрольный центр Атласа</h1>
+          <p>Управление задачами, памятью и закупками 44-ФЗ</p>
+        </div>
+      </div>
+      
+      <div class="header-right">
+        <div class="status-badge">
+          <div class="status-dot"></div>
+          <span>Система активна</span>
+        </div>
+        
+        <!-- Кнопки авторизации -->
+        <div class="auth-buttons" id="auth-buttons">
+          <button class="btn btn-outline" id="login-btn">
+            <i class="fas fa-sign-in-alt"></i>
+            <span>Войти</span>
+          </button>
+          <button class="btn btn-primary" id="register-btn">
+            <i class="fas fa-user-plus"></i>
+            <span>Регистрация</span>
+          </button>
+        </div>
+        
+        <!-- Информация о пользователе (скрыто по умолчанию) -->
+        <div class="user-info" id="user-info" style="display: none;">
+          <div class="user-avatar">
+            <i class="fas fa-user"></i>
+          </div>
+          <div class="user-details">
+            <div class="user-name" id="user-name">Гость</div>
+            <div class="user-role" id="user-role">Не авторизован</div>
+          </div>
+          <button class="btn btn-icon" id="logout-btn" title="Выйти">
+            <i class="fas fa-sign-out-alt"></i>
+          </button>
+        </div>
+      </div>
+    </header>
+
+    <!-- Основной контент -->
+    <div class="main-grid">
+      <!-- Сайдбар -->
+      <nav class="sidebar">
+        <div class="nav-section">
+          <h3>Основное</h3>
+          <div class="nav-links">
+            <a href="#" class="nav-link active" data-target="dashboard">
+              <i class="fas fa-tachometer-alt"></i>
+              <span>Главная панель</span>
+            </a>
+            <a href="#" class="nav-link" data-target="memory">
+              <i class="fas fa-brain"></i>
+              <span>Центр памяти</span>
+            </a>
+            <a href="#" class="nav-link" data-target="tasks">
+              <i class="fas fa-tasks"></i>
+              <span>Доска задач</span>
+            </a>
+            <a href="#" class="nav-link" data-target="chat">
+              <i class="fas fa-comments"></i>
+              <span>Чат с Атласом</span>
+            </a>
+          </div>
+        </div>
+
+        <div class="nav-section">
+          <h3>44-ФЗ Закупки</h3>
+          <div class="nav-links">
+            <a href="#" class="nav-link" data-target="fz-overview">
+              <i class="fas fa-file-contract"></i>
+              <span>Обзор процессов</span>
+            </a>
+            <a href="#" class="nav-link" data-target="fz-documents">
+              <i class="fas fa-folder-open"></i>
+              <span>Документы</span>
+            </a>
+            <a href="#" class="nav-link" data-target="fz-projects">
+              <i class="fas fa-project-diagram"></i>
+              <span>Проекты</span>
+            </a>
+            <a href="#" class="nav-link" data-target="fz-calendar">
+              <i class="fas fa-calendar-alt"></i>
+              <span>Календарь закупок</span>
+            </a>
+            <a href="#" class="nav-link" data-target="fz-templates">
+              <i class="fas fa-copy"></i>
+              <span>Шаблоны</span>
+            </a>
+          </div>
+        </div>
+
+        <div class="nav-section">
+          <h3>Система</h3>
+          <div class="nav-links">
+            <a href="#" class="nav-link" data-target="admin-users" data-admin-only style="display:none;">
+              <i class="fas fa-users-cog"></i>
+              <span>Пользователи</span>
+            </a>
+            <a href="#" class="nav-link" data-target="settings">
+              <i class="fas fa-cog"></i>
+              <span>Настройки</span>
+            </a>
+            <a href="#" class="nav-link" data-target="logs">
+              <i class="fas fa-clipboard-list"></i>
+              <span>Логи системы</span>
+            </a>
+            <a href="#" class="nav-link" data-target="health">
+              <i class="fas fa-heartbeat"></i>
+              <span>Мониторинг</span>
+            </a>
+          </div>
+        </div>
+      </nav>
+
+      <!-- Основной контент -->
+      <main class="content">
+        <!-- Дашборд (по умолчанию) -->
+        <div id="dashboard" class="dashboard-section active-section">
+          <div class="card-grid">
+            <div class="card">
+              <div class="card-header">
+                <h3 class="card-title">Память системы</h3>
+                <div class="card-icon icon-blue">
+                  <i class="fas fa-brain"></i>
+                </div>
+              </div>
+              <div class="card-stats" id="memory-count">12</div>
+              <p class="card-desc">файлов памяти в системе</p>
+              <button class="nav-link" data-target="memory" style="margin-top: 16px; width: 100%;">
+                <i class="fas fa-external-link-alt"></i>
+                <span>Открыть центр памяти</span>
+              </button>
+            </div>
+
+            <div class="card">
+              <div class="card-header">
+                <h3 class="card-title">Активные задачи</h3>
+                <div class="card-icon icon-green">
+                  <i class="fas fa-tasks"></i>
+                </div>
+              </div>
+              <div class="card-stats" id="task-count">8</div>
+              <p class="card-desc">задач на выполнении</p>
+              <button class="nav-link" data-target="tasks" style="margin-top: 16px; width: 100%;">
+                <i class="fas fa-external-link-alt"></i>
+                <span>Открыть доску задач</span>
+              </button>
+            </div>
+
+            <div class="card">
+              <div class="card-header">
+                <h3 class="card-title">Проекты 44-ФЗ</h3>
+                <div class="card-icon icon-purple">
+                  <i class="fas fa-file-contract"></i>
+                </div>
+              </div>
+              <div class="card-stats" id="project-count">5</div>
+              <p class="card-desc">активных закупочных проектов</p>
+              <button class="nav-link" data-target="fz-overview" style="margin-top: 16px; width: 100%;">
+                <i class="fas fa-external-link-alt"></i>
+                <span>Открыть 44-ФЗ</span>
+              </button>
+            </div>
+
+            <div class="card">
+              <div class="card-header">
+                <h3 class="card-title">Статус системы</h3>
+                <div class="card-icon icon-cyan">
+                  <i class="fas fa-server"></i>
+                </div>
+              </div>
+              <div class="card-stats">100%</div>
+              <p class="card-desc">все сервисы работают</p>
+              <button class="nav-link" data-target="health" style="margin-top: 16px; width: 100%;">
+                <i class="fas fa-external-link-alt"></i>
+                <span>Подробный мониторинг</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- Секция 44-ФЗ -->
+          <div class="fz-section">
+            <div class="fz-header">
+              <h2>Рабочий процесс 44-ФЗ</h2>
+              <p>Комплексная система управления государственными закупками по Федеральному закону №44-ФЗ</p>
+            </div>
+
+            <div class="fz-grid">
+              <div class="fz-card" data-target="fz-documents">
+                <div class="fz-card-icon icon-blue">
+                  <i class="fas fa-file-alt"></i>
+                </div>
+                <h3 class="fz-card-title">Документация</h3>
+                <p class="fz-card-desc">Шаблоны документов, инструкции, нормативные акты и реестры</p>
+              </div>
+
+              <div class="fz-card" data-target="fz-projects">
+                <div class="fz-card-icon icon-green">
+                  <i class="fas fa-project-diagram"></i>
+                </div>
+                <h3 class="fz-card-title">Управление проектами</h3>
+                <p class="fz-card-desc">Создание, отслеживание и контроль закупочных проектов</p>
+              </div>
+
+              <div class="fz-card" data-target="fz-calendar">
+                <div class="fz-card-icon icon-amber">
+                  <i class="fas fa-calendar-check"></i>
+                </div>
+                <h3 class="fz-card-title">Календарь сроков</h3>
+                <p class="fz-card-desc">Критические даты, дедлайны и напоминания по процедурам</p>
+              </div>
+
+              <div class="fz-card" data-target="fz-templates">
+                <div class="fz-card-icon icon-purple">
+                  <i class="fas fa-copy"></i>
+                </div>
+                <h3 class="fz-card-title">Шаблоны и формы</h3>
+                <p class="fz-card-desc">Готовые шаблоны документов для всех этапов закупки</p>
+              </div>
+            </div>
+
+            <div style="text-align: center; margin-top: 24px;">
+              <button class="nav-link" data-target="fz-overview" style="display: inline-flex; padding: 12px 24px;">
+                <i class="fas fa-play-circle"></i>
+                <span>Начать работу с 44-ФЗ</span>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Iframe контейнеры для внешних страниц -->
+        <div id="memory-frame" class="iframe-container">
+          <div class="iframe-header">
+            <div class="iframe-title">
+              <i class="fas fa-brain"></i>
+              <span>Центр памяти</span>
+            </div>
+            <button class="iframe-close" data-target="dashboard">
+              <i class="fas fa-times"></i>
+            </button>
+          </div>
+          <iframe src="/memory_center.html" class="iframe-content"></iframe>
+        </div>
+
+        <div id="tasks-frame" class="iframe-container">
+          <div class="iframe-header">
+            <div class="iframe-title">
+              <i class="fas fa-tasks"></i>
+              <span>Доска задач</span>
+            </div>
+            <button class="iframe-close" data-target="dashboard">
+              <i class="fas fa-times"></i>
+            </button>
+          </div>
+          <iframe src="/TASK_BOARD.md" class="iframe-content"></iframe>
+        </div>
+
+        <div id="chat-frame" class="iframe-container">
+          <div class="iframe-header">
+            <div class="iframe-title">
+              <i class="fas fa-comments"></i>
+              <span>Чат с Атласом</span>
+            </div>
+            <button class="iframe-close" data-target="dashboard">
+              <i class="fas fa-times"></i>
+            </button>
+          </div>
+          <iframe src="/control_center/development/index.html" class="iframe-content"></iframe>
+        </div>
+
+        <!-- Секции 44-ФЗ -->
+        <div id="fz-overview" class="iframe-container">
+          <div class="iframe-header">
+            <div class="iframe-title">
+              <i class="fas fa-file-contract"></i>
+              <span>44-ФЗ: Обзор процессов</span>
+            </div>
+            <button class="iframe-close" data-target="dashboard">
+              <i class="fas fa-times"></i>
+            </button>
+          </div>
+          <iframe src="/44-fz-workflow.md" class="iframe-content"></iframe>
+        </div>
+
+        <!-- Остальные iframe контейнеры -->
+        <div id="fz-documents" class="iframe-container">
+          <div class="iframe-header">
+            <div class="iframe-title">
+              <i class="fas fa-folder-open"></i>
+              <span>44-ФЗ: Документы</span>
+            </div>
+            <button class="iframe-close" data-target="dashboard">
+              <i class="fas fa-times"></i>
+            </button>
+          </div>
+          <div class="iframe-content" style="padding: 24px; overflow-y: auto;">
+            <h3 style="margin-bottom: 20px;">Документация 44-ФЗ</h3>
+            <p>Здесь будет интерфейс для работы с документами 44-ФЗ...</p>
+          </div>
+        </div>
+
+        <div id="fz-projects" class="iframe-container">
+          <div class="iframe-header">
+            <div class="iframe-title">
+              <i class="fas fa-project-diagram"></i>
+              <span>44-ФЗ: Проекты</span>
+            </div>
+            <button class="iframe-close" data-target="dashboard">
+              <i class="fas fa-times"></i>
+            </button>
+          </div>
+          <div class="iframe-content" style="padding: 24px; overflow-y: auto;">
+            <h3 style="margin-bottom: 20px;">Управление проектами 44-ФЗ</h3>
+            <p>Здесь будет интерфейс для управления закупочными проектами...</p>
+          </div>
+        </div>
+
+        <div id="fz-calendar" class="iframe-container">
+          <div class="iframe-header">
+            <div class="iframe-title">
+              <i class="fas fa-calendar-alt"></i>
+              <span>44-ФЗ: Календарь</span>
+            </div>
+            <button class="iframe-close" data-target="dashboard">
+              <i class="fas fa-times"></i>
+            </button>
+          </div>
+          <div class="iframe-content" style="padding: 24px; overflow-y: auto;">
+            <h3 style="margin-bottom: 20px;">Календарь закупок 44-ФЗ</h3>
+            <p>Здесь будет календарь сроков и дедлайнов...</p>
+          </div>
+        </div>
+
+        <div id="fz-templates" class="iframe-container">
+          <div class="iframe-header">
+            <div class="iframe-title">
+              <i class="fas fa-copy"></i>
+              <span>44-ФЗ: Шаблоны</span>
+            </div>
+            <button class="iframe-close" data-target="dashboard">
+              <i class="fas fa-times"></i>
+            </button>
+          </div>
+          <div class="iframe-content" style="padding: 24px; overflow-y: auto;">
+            <h3 style="margin-bottom: 20px;">Шаблоны документов 44-ФЗ</h3>
+            <p>Здесь будут шаблоны документов для закупок...</p>
+          </div>
+        </div>
+
+        <!-- Остальные секции -->
+        <div id="settings" class="iframe-container">
+          <div class="iframe-header">
+            <div class="iframe-title">
+              <i class="fas fa-cog"></i>
+              <span>Настройки системы</span>
+            </div>
+            <button class="iframe-close" data-target="dashboard">
+              <i class="fas fa-times"></i>
+            </button>
+          </div>
+          <div class="iframe-content" style="padding: 24px; overflow-y: auto;">
+            <div id="settings-content">
+              <h3 style="margin-bottom: 20px;">Настройки контрольного центра</h3>
+              <p>Здесь будут настройки системы...</p>
+            </div>
+          </div>
+        </div>
+
+        <div id="logs" class="iframe-container">
+          <div class="iframe-header">
+            <div class="iframe-title">
+              <i class="fas fa-clipboard-list"></i>
+              <span>Логи системы</span>
+            </div>
+            <button class="iframe-close" data-target="dashboard">
+              <i class="fas fa-times"></i>
+            </button>
+          </div>
+          <div class="iframe-content" style="padding: 24px; overflow-y: auto;">
+            <div id="logs-content">
+              <h3 style="margin-bottom: 20px;">Системные логи</h3>
+              <p>Здесь будут логи работы системы...</p>
+            </div>
+          </div>
+        </div>
+
+        <div id="health" class="iframe-container">
+          <div class="iframe-header">
+            <div class="iframe-title">
+              <i class="fas fa-heartbeat"></i>
+              <span>Мониторинг системы</span>
+            </div>
+            <button class="iframe-close" data-target="dashboard">
+              <i class="fas fa-times"></i>
+            </button>
+          </div>
+          <div class="iframe-content" style="padding: 24px; overflow-y: auto;">
+            <div id="health-content">
+              <h3 style="margin-bottom: 20px;">Мониторинг состояния системы</h3>
+              <p>Здесь будет мониторинг работы всех компонентов...</p>
+            </div>
+          </div>
+        </div>
+
+        <div id="admin-users" class="iframe-container">
+          <div class="iframe-header">
+            <div class="iframe-title">
+              <i class="fas fa-users-cog"></i>
+              <span>Администрирование пользователей</span>
+            </div>
+            <button class="iframe-close" data-target="dashboard">
+              <i class="fas fa-times"></i>
+            </button>
+          </div>
+          <div class="iframe-content" style="padding: 24px; overflow-y: auto;">
+            <div id="admin-users-content">
+              <h3 style="margin-bottom: 20px;">Управление пользователями</h3>
+              <p>Здесь будет список пользователей.</p>
+            </div>
+          </div>
+        </div>
+      </main>
+    </div>
+
+    <!-- Футер -->
+    <footer class="footer">
+      <p>Контрольный центр Атласа • Версия 1.0 • 2026</p>
+      <p style="margin-top: 8px; font-size: 12px; color: var(--text-muted);">
+        <i class="fas fa-bolt"></i> Работает на OpenClaw • <i class="fas fa-shield-alt"></i> Защищённое соединение
+      </p>
+    </footer>
+  </div>
+
+  <script>
+    // Навигация между секциями
+    document.addEventListener('DOMContentLoaded', function() {
+      const navLinks = document.querySelectorAll('.nav-link, .fz-card, button[data-target]');
+      const iframeContainers = document.querySelectorAll('.iframe-container');
+      const sections = document.querySelectorAll('.dashboard-section, .iframe-container');
+      const closeButtons = document.querySelectorAll('.iframe-close');
+      
+      // Функция переключения секций
+      function switchSection(targetId) {
+        // Скрыть все секции
+        sections.forEach(section => {
+          section.classList.remove('active-section', 'active');
+        });
+        
+        // Показать целевую секцию
+        const targetSection = document.getElementById(targetId);
+        if (targetSection) {
+          targetSection.classList.add('active-section', 'active');
+        }
+        
+        // Обновить активные ссылки в навигации
+        navLinks.forEach(link => {
+          if (link.getAttribute('data-target') === targetId) {
+            link.classList.add('active');
+          } else {
+            link.classList.remove('active');
+          }
+        });
+        
+        // Сохранить текущую секцию в URL
+        history.pushState({ section: targetId }, '', `#${targetId}`);
+      }
+      
+      // Обработчики для навигационных ссылок
+      navLinks.forEach(link => {
+        link.addEventListener('click', function(e) {
+          e.preventDefault();
+          const targetId = this.getAttribute('data-target');
+          if (targetId) {
+            switchSection(targetId);
+          }
+        });
+      });
+      
+      // Обработчики для кнопок закрытия
+      closeButtons.forEach(button => {
+        button.addEventListener('click', function() {
+          const targetId = this.getAttribute('data-target');
+          if (targetId) {
+            switchSection(targetId);
+          }
+        });
+      });
+      
+      // Обработка hash в URL
+      function handleHashChange() {
+        const hash = window.location.hash.substring(1);
+        if (hash) {
+          switchSection(hash);
+        } else {
+          switchSection('dashboard');
+        }
+      }
+      
+      window.addEventListener('hashchange', handleHashChange);
+      handleHashChange(); // Инициализация при загрузке
+      
+      // Обновление статистики
+      function updateStats() {
+        // Здесь можно добавить AJAX запросы для обновления статистики
+        const memoryCount = document.getElementById('memory-count');
+        const taskCount = document.getElementById('task-count');
+        const projectCount = document.getElementById('project-count');
+        
+        // Пример обновления (в реальности нужно получать с сервера)
+        if (memoryCount) memoryCount.textContent = '12';
+        if (taskCount) taskCount.textContent = '8';
+        if (projectCount) projectCount.textContent = '5';
+      }
+      
+      updateStats();
+      
+      // Автообновление статистики каждые 30 секунд
+      setInterval(updateStats, 30000);
+      
+      // Обработка сообщений из iframe
+      window.addEventListener('message', function(event) {
+        if (event.data && event.data.type === 'switchSection') {
+          switchSection(event.data.section);
+        }
+      });
+    });
+    
+    // Функция для отправки сообщений в Telegram
+    function sendToTelegram(message) {
+      // Здесь будет интеграция с Telegram API
+      console.log('Отправка в Telegram:', message);
+      
+      // Временная заглушка - в реальности нужно вызывать OpenClaw API
+      fetch('/api/send-telegram', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ message: message })
+      })
+      .then(response => response.json())
+      .then(data => {
+        console.log('Сообщение отправлено:', data);
+        showNotification('Сообщение отправлено в Telegram', 'success');
+      })
+      .catch(error => {
+        console.error('Ошибка отправки:', error);
+        showNotification('Ошибка отправки в Telegram', 'error');
+      });
+    }
+    
+    // Функция показа уведомлений
+    function showNotification(message, type = 'info') {
+      const notification = document.createElement('div');
+      notification.className = `notification notification-${type}`;
+      notification.innerHTML = `
+        <i class="fas fa-${type === 'success' ? 'check-circle' : type === 'error' ? 'exclamation-circle' : 'info-circle'}"></i>
+        <span>${message}</span>
+        <button class="notification-close"><i class="fas fa-times"></i></button>
+      `;
+      
+      document.body.appendChild(notification);
+      
+      // Анимация появления
+      setTimeout(() => notification.classList.add('show'), 10);
+      
+      // Автоматическое скрытие через 5 секунд
+      setTimeout(() => {
+        notification.classList.remove('show');
+        setTimeout(() => notification.remove(), 300);
+      }, 5000);
+      
+      // Закрытие по клику
+      notification.querySelector('.notification-close').addEventListener('click', () => {
+        notification.classList.remove('show');
+        setTimeout(() => notification.remove(), 300);
+      });
+    }
+    
+    // Стили для уведомлений
+    const notificationStyles = document.createElement('style');
+    notificationStyles.textContent = `
+      .notification {
+        position: fixed;
+        top: 20px;
+        right: 20px;
+        padding: 16px 20px;
+        border-radius: var(--radius);
+        background: var(--bg-card);
+        border: 1px solid var(--border);
+        box-shadow: var(--shadow-lg);
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        z-index: 1000;
+        transform: translateX(120%);
+        transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        max-width: 400px;
+      }
+      
+      .notification.show {
+        transform: translateX(0);
+      }
+      
+      .notification-success {
+        border-left: 4px solid var(--accent-green);
+      }
+      
+      .notification-error {
+        border-left: 4px solid var(--accent-red);
+      }
+      
+      .notification-info {
+        border-left: 4px solid var(--accent-blue);
+      }
+      
+      .notification i {
+        font-size: 20px;
+      }
+      
+      .notification-success i {
+        color: var(--accent-green);
+      }
+      
+      .notification-error i {
+        color: var(--accent-red);
+      }
+      
+      .notification-info i {
+        color: var(--accent-blue);
+      }
+      
+      .notification span {
+        flex-grow: 1;
+        color: var(--text-primary);
+      }
+      
+      .notification-close {
+        background: none;
+        border: none;
+        color: var(--text-muted);
+        cursor: pointer;
+        padding: 4px;
+        border-radius: var(--radius-sm);
+        transition: var(--transition);
+      }
+      
+      .notification-close:hover {
+        background: var(--bg-hover);
+        color: var(--text-primary);
+      }
+    `;
+    document.head.appendChild(notificationStyles);
+    
+    // Инициализация при загрузке
+    document.addEventListener('DOMContentLoaded', function() {
+      // Показать приветственное сообщение
+      setTimeout(() => {
+        showNotification('Контрольный центр Атласа загружен. Все системы работают.', 'success');
+      }, 1000);
+      
+      // Отправить тестовое сообщение в Telegram (закомментировать в продакшене)
+      // sendToTelegram('Контрольный центр Атласа запущен. Готов к работе.');
+    });
+  </script>
+  
+  <!-- Модальные окна авторизации -->
+  <div class="modal" id="login-modal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2>Вход в систему</h2>
+        <button class="modal-close" data-modal="login-modal">&times;</button>
+      </div>
+      <div class="modal-body">
+        <form id="login-form">
+          <div class="form-group">
+            <label for="login-username">Имя пользователя</label>
+            <input type="text" id="login-username" required placeholder="Введите имя пользователя">
+          </div>
+          <div class="form-group">
+            <label for="login-password">Пароль</label>
+            <input type="password" id="login-password" required placeholder="Введите пароль">
+          </div>
+          <div class="form-actions">
+            <button type="submit" class="btn btn-primary btn-block">
+              <i class="fas fa-sign-in-alt"></i>
+              Войти
+            </button>
+          </div>
+          <div class="form-footer">
+            <p>Нет аккаунта? <a href="#" id="show-register">Зарегистрироваться</a></p>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal" id="register-modal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2>Регистрация</h2>
+        <button class="modal-close" data-modal="register-modal">&times;</button>
+      </div>
+      <div class="modal-body">
+        <form id="register-form">
+          <div class="form-group">
+            <label for="register-username">Имя пользователя</label>
+            <input type="text" id="register-username" required placeholder="Придумайте имя пользователя">
+            <div class="form-hint">Только латинские буквы, цифры и подчеркивания</div>
+          </div>
+          <div class="form-group">
+            <label for="register-email">Email</label>
+            <input type="email" id="register-email" required placeholder="Введите ваш email">
+          </div>
+          <div class="form-group">
+            <label for="register-password">Пароль</label>
+            <input type="password" id="register-password" required placeholder="Придумайте пароль">
+            <div class="form-hint">Не менее 6 символов</div>
+          </div>
+          <div class="form-group">
+            <label for="register-confirm">Подтверждение пароля</label>
+            <input type="password" id="register-confirm" required placeholder="Повторите пароль">
+          </div>
+          <div class="form-actions">
+            <button type="submit" class="btn btn-primary btn-block">
+              <i class="fas fa-user-plus"></i>
+              Зарегистрироваться
+            </button>
+          </div>
+          <div class="form-footer">
+            <p>Уже есть аккаунт? <a href="#" id="show-login">Войти</a></p>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- Уведомления -->
+  <div id="notification-container"></div>
+  
+  <!-- Скрипты -->
+  <script src="auth.js"></script>
+</body>
+</html>

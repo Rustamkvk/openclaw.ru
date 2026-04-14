@@ -1,0 +1,36 @@
+{
+  "name": "atlas-dashboard-simple",
+  "version": "1.0.0",
+  "description": "Упрощенная версия Контрольного центра Атласа с авторизацией",
+  "main": "start-simple.js",
+  "scripts": {
+    "start": "node start-simple.js",
+    "auth": "node simple-auth-server.js",
+    "websocket": "node websocket-server.js",
+    "http": "node -e \"const http = require('http'); const fs = require('fs'); const path = require('path'); const server = http.createServer((req, res) => { let filePath = '.' + req.url; if (filePath === './') filePath = './index.html'; const extname = path.extname(filePath); let contentType = 'text/html'; switch (extname) { case '.js': contentType = 'text/javascript'; break; case '.css': contentType = 'text/css'; break; case '.json': contentType = 'application/json'; break; } fs.readFile(filePath, (error, content) => { if (error) { if(error.code == 'ENOENT') { res.writeHead(404); res.end('File not found'); } else { res.writeHead(500); res.end('Server error: ' + error.code); } } else { res.writeHead(200, { 'Content-Type': contentType }); res.end(content, 'utf-8'); } }); }); server.listen(8080, () => { console.log('HTTP сервер запущен на порту 8080'); console.log('Откройте http://localhost:8080 в браузере'); });\"",
+    "test": "echo \"Запустите npm start для тестирования\""
+  },
+  "keywords": [
+    "atlas",
+    "dashboard",
+    "auth",
+    "simple",
+    "json-db"
+  ],
+  "author": "Атлас",
+  "license": "MIT",
+  "dependencies": {
+    "ws": "^8.14.2"
+  },
+  "optionalDependencies": {
+    "bcryptjs": "^2.4.3",
+    "jsonwebtoken": "^9.0.2",
+    "express": "^4.18.2",
+    "body-parser": "^1.20.2",
+    "cors": "^2.8.5"
+  },
+  "engines": {
+    "node": ">=14.0.0"
+  },
+  "type": "commonjs"
+}

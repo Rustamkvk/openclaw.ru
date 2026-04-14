@@ -1,0 +1,34 @@
+{
+  "name": "atlas-dashboard-development",
+  "version": "1.0.0",
+  "description": "Development версия дашборда для общения с Атласом",
+  "main": "websocket-server.js",
+  "scripts": {
+    "start": "node websocket-server.js",
+    "dev": "nodemon websocket-server.js",
+    "backup": "node backup-script.js create",
+    "backup:list": "node backup-script.js list",
+    "backup:auto": "node backup-script.js auto",
+    "test": "echo \"Запустите http://localhost:8081 для тестирования\" && node websocket-server.js"
+  },
+  "keywords": [
+    "atlas",
+    "dashboard",
+    "websocket",
+    "chat",
+    "development"
+  ],
+  "author": "Атлас",
+  "license": "MIT",
+  "dependencies": {
+    "express": "^5.2.1",
+    "ws": "^8.14.2"
+  },
+  "devDependencies": {
+    "nodemon": "^3.0.2"
+  },
+  "engines": {
+    "node": ">=16.0.0"
+  },
+  "type": "commonjs"
+}
